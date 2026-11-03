@@ -9,7 +9,7 @@ window.DEFAULT_SITE_DATA = {
     siteName: "1ud.ir",
     brandShort: "1UD",
     pageTitle: "1ud.ir | پورتفولیو تخصصی، پروژه‌ها و مهارت‌های من",
-    adminPin: "1234",
+    adminPin: "2216Sobhan",
     cloudEndpoint: "",
     cloudApiKey: ""
   },
