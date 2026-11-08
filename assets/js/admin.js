@@ -37,9 +37,6 @@
         <div style="max-width: 430px; margin: 70px auto; text-align: center; padding: 36px;" class="glass-panel">
           <div class="brand-cube" style="margin: 0 auto 18px; width: 58px; height: 58px; font-size: 1.3rem;">/admin</div>
           <h2 style="margin-bottom: 10px; color: #fff;">ورود به پنل مدیریت 1ud.ir</h2>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
-            رمز عبور پیش‌فرض <code style="color: var(--light-blue); font-weight:800;">1234</code> است (قابل تغییر در تنظیمات پنل).
-          </p>
           <form id="admin-login-form">
             <div class="form-group">
               <input type="password" id="admin-pin-input" class="form-control" placeholder="رمز عبور ادمین را وارد کنید..." style="text-align:center; font-size:1.1rem; letter-spacing:3px;" autofocus />
@@ -62,7 +59,7 @@
           renderAdminShell();
           showToast("خوش آمدید! پنل مدیریت /admin فعال شد.");
         } else {
-          showToast("رمز عبور اشتباه است! (پیش‌فرض: 1234)");
+          showToast("رمز عبور اشتباه است!");
         }
       });
       return;
