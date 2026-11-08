@@ -124,6 +124,23 @@ window.DEFAULT_SITE_DATA = {
   "projects": [
     {
       "id": "pr0",
+      "title": "خرازی السا",
+      "category": "وب اپلیکیشن",
+      "description": "سایت فروشگاهی خرازی السا",
+      "tags": [
+        "React",
+        "js",
+        "python fast API",
+        "mongodb"
+      ],
+      "date": "1405",
+      "image": "assets/media/project-0-خرازی-السا.jpg",
+      "liveUrl": "kharazielsa.ir",
+      "repoUrl": "https://github.com/sobhan05h/",
+      "featured": true
+    },
+    {
+      "id": "pr1",
       "title": "face recognition system",
       "category": "بینایی ماشین",
       "description": "پروژه ی تشخیص چهره و ثبت حضور و غیاب از طریق بینایی ماشین و میزان ساعات کارکرد ",
@@ -133,13 +150,13 @@ window.DEFAULT_SITE_DATA = {
         "streamlit"
       ],
       "date": "1405",
-      "image": "assets/media/project-0-face-recognition-system.jpg",
+      "image": "assets/media/project-1-face-recognition-system.jpg",
       "liveUrl": "https://sobhan05h.github.io/1ud-site/",
       "repoUrl": "https://github.com/sobhan05h",
       "featured": true
     },
     {
-      "id": "pr1",
+      "id": "pr2",
       "title": "پلتفرم class insight",
       "category": "وب اپلیکیشن",
       "description": "داشبورد مانیتورینگ و تحلیل داده‌های لحظه‌ای با رابط کاربری بسیار زیبا\n طراحی‌شده برای پردازش سریع داده‌ها و تصمیم گیری بهتر مدیریت یک موسسه ",
@@ -150,7 +167,7 @@ window.DEFAULT_SITE_DATA = {
         "scikit learn"
       ],
       "date": "۱۴۰۴",
-      "image": "assets/media/project-1-پلتفرم-class-insight.png",
+      "image": "assets/media/project-2-پلتفرم-class-insight.jpg",
       "liveUrl": "https://sobhan05h.github.io/1ud-site/",
       "repoUrl": "https://sobhan05h.github.io/1ud-site/",
       "featured": true
