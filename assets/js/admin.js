@@ -79,8 +79,8 @@
             <button class="btn btn-primary" onclick="saveAllAdminChanges()" style="padding:8px 18px; font-size:0.88rem;">
               ✓ ذخیره و اعمال آنی
             </button>
-            <button class="btn btn-outline" onclick="exportSiteDataJsFile()" style="padding:8px 16px; font-size:0.86rem;" title="دانلود فایل site-data.js برای قرار دادن دائمی روی هاست">
-              ⬇ خروجی دائمی (site-data.js)
+            <button class="btn btn-outline" onclick="exportSiteDataJsFile()" style="padding:8px 16px; font-size:0.86rem;" title="دانلود ZIP شامل site-data.js + پوشه media (عکس‌های پروژه‌ها)">
+              ⬇ خروجی دائمی + media
             </button>
             <button class="btn btn-outline" onclick="closeAdminModal()" style="padding:8px 14px; font-size:0.86rem;">
               ✕ مشاهده سایت
@@ -295,10 +295,12 @@
                 <h4 style="color:#fff; margin-bottom:8px;">چطور تغییرات روی هاست معمولی (بدون بک‌اند) برای همه دائمی شود؟</h4>
                 <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:14px;">
                   ۱. دکمه <strong>«ذخیره و اعمال آنی»</strong> تمام تغییرات را بلافاصله در مرورگر شما ذخیره و نمایش می‌دهد.<br/>
-                  ۲. برای اینکه تغییرات بدون نیاز به دیتابیس و بک‌اند برای تمام بازدیدکنندگان سایت <code>1ud.ir</code> نمایش داده شود، کافیست روی دکمه <strong>«خروجی دائمی (site-data.js)»</strong> کلیک کنید و فایل دانلودشده را در پوشه <code>assets/js/site-data.js</code> هاست خود جایگزین نمایید.
+                  ۲. عکس‌های آپلود‌شده پروژه‌ها و آواتار هنگام <strong>«خروجی دائمی + media»</strong> به صورت فایل واقعی داخل پوشه <code>assets/media</code> ذخیره می‌شوند (دیگر داخل site-data.js به صورت base64 حجیم نمی‌مانند).<br/>
+                  ۳. اگر پروژه‌ای را از لیست حذف کنید، عکس آن هم در خروجی جدید وجود نخواهد داشت.<br/>
+                  ۴. فایل ZIP دانلودشده را باز کنید: <code>site-data.js</code> را در <code>assets/js/</code> و محتویات <code>assets/media/</code> را در پوشه media روی هاست کپی/جایگزین کنید.
                 </p>
                 <div style="display:flex; flex-wrap:wrap; gap:12px;">
-                  <button class="btn btn-primary" onclick="exportSiteDataJsFile()">دانلود فایل آماده site-data.js</button>
+                  <button class="btn btn-primary" onclick="exportSiteDataJsFile()">⬇ دانلود ZIP (site-data + media)</button>
                   <button class="btn btn-outline" onclick="exportJsonBackup()">دانلود بکاپ JSON</button>
                   <button class="btn-danger" onclick="resetToDefaultData()">بازگردانی به اطلاعات پیش‌فرض</button>
                 </div>
@@ -330,13 +332,39 @@
   window.handleImageUpload = function (inputEl, targetInputId) {
     const file = inputEl.files?.[0];
     if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      showToast("لطفاً فقط فایل تصویری انتخاب کنید.");
+      return;
+    }
+    // فشرده‌سازی تصویر قبل از تبدیل به dataURL تا localStorage و فایل خروجی حجیم نشود
     const reader = new FileReader();
     reader.onload = function (evt) {
-      const target = document.getElementById(targetInputId);
-      if (target) {
-        target.value = evt.target.result;
-        showToast("تصویر با موفقیت به فرمت داخلی تبدیل شد!");
-      }
+      const img = new Image();
+      img.onload = function () {
+        const MAX_W = 1200;
+        let w = img.width;
+        let h = img.height;
+        if (w > MAX_W) {
+          h = Math.round((h * MAX_W) / w);
+          w = MAX_W;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        // JPEG با کیفیت مناسب برای حجم کمتر
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+        const target = document.getElementById(targetInputId);
+        if (target) {
+          target.value = dataUrl;
+          showToast("تصویر فشرده و آماده شد (در پوشه media ذخیره می‌شود هنگام خروجی دائمی)");
+        }
+      };
+      img.onerror = function () {
+        showToast("خطا در خواندن تصویر. فایل دیگری امتحان کنید.");
+      };
+      img.src = evt.target.result;
     };
     reader.readAsDataURL(file);
   };
@@ -667,24 +695,116 @@
     showToast("تغییرات با موفقیت ذخیره و در سایت اعمال شد!");
   };
 
-  window.exportSiteDataJsFile = function () {
-    const updated = collectFormData();
-    saveSiteData(updated);
-    renderSite(updated);
-    const content =
-      "/**\n * فایل داده‌های به‌روزشده سایت 1ud.ir (تولیدشده توسط پنل /admin)\n * این فایل را در مسیر assets/js/site-data.js هاست خود جایگزین کنید.\n */\nwindow.DEFAULT_SITE_DATA = " +
-      JSON.stringify(updated, null, 2) +
-      ";\n";
-    const blob = new Blob([content], { type: "application/javascript;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "site-data.js";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    showToast("فایل site-data.js دانلود شد! آن را در پوشه assets/js هاست جایگزین کنید.");
+  /**
+   * استخراج data:image از فیلدها، ذخیره در پوشه media و تبدیل مسیر به assets/media/...
+   * اگر پروژه‌ای حذف شده باشد، عکس آن هم در خروجی جدید وجود نخواهد داشت.
+   */
+  function extractMediaFromData(data) {
+    const mediaFiles = []; // { path: 'assets/media/xxx.jpg', blob: Blob, dataUrl: string }
+
+    function dataUrlToBlob(dataUrl) {
+      const parts = dataUrl.split(",");
+      const mime = (parts[0].match(/:(.*?);/) || [])[1] || "image/jpeg";
+      const bstr = atob(parts[1]);
+      const u8 = new Uint8Array(bstr.length);
+      for (let i = 0; i < bstr.length; i++) u8[i] = bstr.charCodeAt(i);
+      return new Blob([u8], { type: mime });
+    }
+
+    function processField(obj, key, basename) {
+      const val = obj[key];
+      if (typeof val !== "string" || !val.startsWith("data:image")) return;
+      const ext = val.includes("image/png") ? "png" : val.includes("image/webp") ? "webp" : "jpg";
+      const relPath = `assets/media/${basename}.${ext}`;
+      const blob = dataUrlToBlob(val);
+      mediaFiles.push({ path: relPath, blob, name: `${basename}.${ext}` });
+      obj[key] = relPath;
+    }
+
+    // آواتار
+    if (data.hero) processField(data.hero, "avatarUrl", "avatar");
+
+    // پروژه‌ها — فقط پروژه‌های موجود در لیست فعلی؛ پروژه‌های حذف‌شده عکس‌شان هم حذف می‌شود
+    (data.projects || []).forEach((pr, i) => {
+      const safe = (pr.title || `project-${i}`)
+        .replace(/[^\w\u0600-\u06FF\-]+/g, "-")
+        .replace(/-+/g, "-")
+        .slice(0, 40) || `project-${i}`;
+      processField(pr, "image", `project-${i}-${safe}`);
+    });
+
+    return mediaFiles;
+  }
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (window.JSZip) return resolve();
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  window.exportSiteDataJsFile = async function () {
+    try {
+      showToast("در حال آماده‌سازی خروجی دائمی و پوشه media...");
+      let updated = collectFormData();
+      // کپی عمیق برای تغییر مسیرها بدون خراب کردن فرم فعلی
+      updated = JSON.parse(JSON.stringify(updated));
+      const mediaFiles = extractMediaFromData(updated);
+
+      saveSiteData(updated); // نسخه با مسیر فایل (نه base64) در localStorage
+      renderSite(updated);
+
+      const jsContent =
+        "/**\n * فایل داده‌های به‌روزشده سایت 1ud.ir (تولیدشده توسط پنل /admin)\n" +
+        " * تصاویر در پوشه assets/media ذخیره شده‌اند. این فایل را در assets/js/site-data.js جایگزین کنید.\n */\n" +
+        "window.DEFAULT_SITE_DATA = " +
+        JSON.stringify(updated, null, 2) +
+        ";\n";
+
+      // اگر تصویری برای استخراج نبود، فقط site-data.js را بده
+      if (mediaFiles.length === 0) {
+        const blob = new Blob([jsContent], { type: "application/javascript;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "site-data.js";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast("فایل site-data.js دانلود شد. در assets/js جایگزین کنید.");
+        return;
+      }
+
+      // ZIP شامل site-data.js + assets/media/*
+      await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js");
+      const zip = new JSZip();
+      zip.file("site-data.js", jsContent);
+      const mediaFolder = zip.folder("assets/media");
+      mediaFiles.forEach((f) => {
+        mediaFolder.file(f.name, f.blob);
+      });
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "1ud-export-with-media.zip";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast(
+        "ZIP دانلود شد! محتویات را روی هاست کپی کنید: site-data.js → assets/js/ و پوشه media → assets/media/"
+      );
+    } catch (err) {
+      console.error(err);
+      showToast("خطا در ساخت خروجی. کنسول مرورگر را بررسی کنید.");
+    }
   };
 
   window.exportJsonBackup = function () {
