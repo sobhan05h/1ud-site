@@ -1,6 +1,6 @@
 /**
  * فایل داده‌های به‌روزشده سایت 1ud.ir (تولیدشده توسط پنل /admin)
- * این فایل را در مسیر assets/js/site-data.js هاست خود جایگزین کنید.
+ * تصاویر در پوشه assets/media ذخیره شده‌اند. این فایل را در assets/js/site-data.js جایگزین کنید.
  */
 window.DEFAULT_SITE_DATA = {
   "meta": {
@@ -23,7 +23,7 @@ window.DEFAULT_SITE_DATA = {
     "name": "سبحان",
     "roleTitle": "توسعه‌دهنده نرم‌افزار و علاقه‌مند به داده و هوش مصنوعی.",
     "bio": " دانشجوی مهندسی کامپیوتر و توسعه‌دهنده Python با بیش از ۴ سال تجربه عملی در برنامه‌نویسی، توسعه Backend، تحلیل داده و علم داده. علاقه‌مند به طراحی و پیاده‌سازی راهکارهای نرم‌افزاری مقیاس‌پذیر و تبدیل داده‌ها به بینش‌های کاربردی.",
-    "avatarUrl": "assets/media/avatar.jpg",
+    "avatarUrl": "assets/media/avatar.png",
     "primaryCtaText": "مشاهده پروژه‌ها",
     "primaryCtaLink": "#projects",
     "secondaryCtaText": "ارتباط با من",
@@ -124,6 +124,22 @@ window.DEFAULT_SITE_DATA = {
   "projects": [
     {
       "id": "pr0",
+      "title": "face recognition system",
+      "category": "بینایی ماشین",
+      "description": "پروژه ی تشخیص چهره و ثبت حضور و غیاب از طریق بینایی ماشین و میزان ساعات کارکرد ",
+      "tags": [
+        "python",
+        "open cv",
+        "streamlit"
+      ],
+      "date": "1405",
+      "image": "assets/media/project-0-face-recognition-system.jpg",
+      "liveUrl": "https://sobhan05h.github.io/1ud-site/",
+      "repoUrl": "https://github.com/sobhan05h",
+      "featured": true
+    },
+    {
+      "id": "pr1",
       "title": "پلتفرم class insight",
       "category": "وب اپلیکیشن",
       "description": "داشبورد مانیتورینگ و تحلیل داده‌های لحظه‌ای با رابط کاربری بسیار زیبا\n طراحی‌شده برای پردازش سریع داده‌ها و تصمیم گیری بهتر مدیریت یک موسسه ",
@@ -134,60 +150,9 @@ window.DEFAULT_SITE_DATA = {
         "scikit learn"
       ],
       "date": "۱۴۰۴",
-      "image": "assets/media/project-0.jpg",
+      "image": "assets/media/project-1-پلتفرم-class-insight.png",
       "liveUrl": "https://sobhan05h.github.io/1ud-site/",
-      "repoUrl": "https://github.com/sobhan05h",
-      "featured": true
-    },
-    {
-      "id": "pr1",
-      "title": "سیستم مدیریت محتوای بدون سرور (Zero-Backend CMS)",
-      "category": "ابزار توسعه‌دهنده",
-      "description": "معماری فوق‌سبک برای مدیریت کامل وب‌سایت‌های شخصی و شرکتی از طریق پنل /admin بدون نیاز به دیتابیس و هزینه‌های سنگین هاستینگ.",
-      "tags": [
-        "Vanilla JS",
-        "LocalStorage",
-        "JSON Sync",
-        "SPA"
-      ],
-      "date": "۱۴۰۴",
-      "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80",
-      "liveUrl": "https://1ud.ir/admin",
-      "repoUrl": "https://github.com",
-      "featured": true
-    },
-    {
-      "id": "pr2",
-      "title": "اپلیکیشن کیف پول و ترید نئون",
-      "category": "رابط کاربری",
-      "description": "طراحی و پیاده‌سازی رابط کاربری صرافی دیجیتال با گراف‌های زنده، حالت تاریک اختصاصی و انیمیشن‌های روان ۶۰ فریم بر ثانیه.",
-      "tags": [
-        "Next.js",
-        "WebSockets",
-        "Framer Motion",
-        "CSS Grid"
-      ],
-      "date": "۱۴۰۳",
-      "image": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=900&q=80",
-      "liveUrl": "https://1ud.ir",
-      "repoUrl": "https://github.com",
-      "featured": true
-    },
-    {
-      "id": "pr3",
-      "title": "ربات هوشمند و اتوماسیون تحت وب",
-      "category": "هوش مصنوعی و اسکریپت",
-      "description": "سیستم خودکارسازی فرآیندهای کاری و استخراج اطلاعات با پنل کنترل تحت وب و گزارش‌دهی لحظه‌ای در تلگرام.",
-      "tags": [
-        "Python",
-        "FastAPI",
-        "Telegram API",
-        "Automation"
-      ],
-      "date": "۱۴۰۳",
-      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80",
-      "liveUrl": "https://1ud.ir",
-      "repoUrl": "https://github.com",
+      "repoUrl": "https://sobhan05h.github.io/1ud-site/",
       "featured": true
     }
   ],
