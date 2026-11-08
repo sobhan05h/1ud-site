@@ -23,7 +23,7 @@ window.DEFAULT_SITE_DATA = {
     "name": "سبحان",
     "roleTitle": "توسعه‌دهنده نرم‌افزار و علاقه‌مند به داده و هوش مصنوعی.",
     "bio": " دانشجوی مهندسی کامپیوتر و توسعه‌دهنده Python با بیش از ۴ سال تجربه عملی در برنامه‌نویسی، توسعه Backend، تحلیل داده و علم داده. علاقه‌مند به طراحی و پیاده‌سازی راهکارهای نرم‌افزاری مقیاس‌پذیر و تبدیل داده‌ها به بینش‌های کاربردی.",
-    "avatarUrl": "assets/media/avatar.png",
+    "avatarUrl": "assets/media/avatar.jpg",
     "primaryCtaText": "مشاهده پروژه‌ها",
     "primaryCtaLink": "#projects",
     "secondaryCtaText": "ارتباط با من",
