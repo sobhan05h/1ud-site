@@ -259,33 +259,39 @@ function renderProjectsSection(projects, activeCat) {
 
   const filtered = activeCat === "همه" ? projects : projects.filter((p) => p.category === activeCat);
   gridEl.innerHTML = filtered
-    .map(
-      (pr) => `
+    .map((pr, idx) => {
+      const tags = (Array.isArray(pr.tags) ? pr.tags : String(pr.tags || "").split(","))
+        .map((t) => t.trim())
+        .filter(Boolean);
+      const statusLabel = pr.featured === false ? "Completed" : "Active";
+      const statusClass = pr.featured === false ? "is-done" : "is-active";
+      const techLine = tags.slice(0, 4).join(" · ") || (pr.category || "");
+      return `
     <article class="project-card">
       <div class="project-thumb">
         <img src="${escapeHtml(pr.image)}" alt="${escapeHtml(pr.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80'" />
-        <span class="project-category-chip">${escapeHtml(pr.category)}</span>
+        <span class="project-status-chip ${statusClass}">${statusLabel}</span>
+        ${pr.category ? `<span class="project-category-chip">${escapeHtml(pr.category)}</span>` : ""}
       </div>
       <div class="project-body">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <h3 class="project-title" style="margin-bottom:0;">${escapeHtml(pr.title)}</h3>
-          <span style="font-size:0.78rem; color:var(--cyan-glow);">${escapeHtml(pr.date || "")}</span>
+        <h3 class="project-title">${escapeHtml(pr.title)}</h3>
+        <div class="project-meta">
+          ${pr.date ? `<span>${escapeHtml(pr.date)}</span>` : ""}
+          ${pr.date && techLine ? `<span class="dot"></span>` : ""}
+          ${techLine ? `<span>${escapeHtml(techLine)}</span>` : ""}
         </div>
         <p class="project-desc">${escapeHtml(pr.description)}</p>
         <div class="project-tags">
-          ${(Array.isArray(pr.tags) ? pr.tags : String(pr.tags || "").split(","))
-            .filter(Boolean)
-            .map((t) => `<span class="tag-chip">${escapeHtml(t.trim())}</span>`)
-            .join("")}
+          ${tags.map((t) => `<span class="tag-chip">${escapeHtml(t)}</span>`).join("")}
         </div>
         <div class="project-links">
           ${pr.liveUrl ? `<a class="link-live" href="${escapeHtml(pr.liveUrl)}" target="_blank" rel="noopener">مشاهده آنلاین ↗</a>` : ""}
           ${pr.repoUrl ? `<a class="link-repo" href="${escapeHtml(pr.repoUrl)}" target="_blank" rel="noopener">سورس / جزئیات</a>` : ""}
+          ${!pr.liveUrl && !pr.repoUrl ? `<a class="link-live" href="#projects">Open Project</a>` : ""}
         </div>
       </div>
-    </article>
-  `
-    )
+    </article>`;
+    })
     .join("");
 }
 
