@@ -636,188 +636,210 @@ section {
   color: var(--text-muted);
 }
 
-/* Projects Portfolio Grid — optimized for 2:3 portrait mockups */
+/* Projects Portfolio Grid — 2:3 vertical mockups + dark blur overlay (like reference) */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
 }
 
 .project-card {
-  background: linear-gradient(165deg, rgba(12, 22, 42, 0.92), rgba(6, 12, 24, 0.95));
-  border: 1px solid rgba(56, 189, 248, 0.18);
-  border-radius: 22px;
+  background: #060b14;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 212, 255, 0.06);
-  transition: var(--transition);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 212, 255, 0.05);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .project-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(0, 212, 255, 0.45);
-  box-shadow: 0 24px 50px rgba(0, 40, 80, 0.55), 0 0 28px rgba(0, 212, 255, 0.18);
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 0 28px 56px rgba(0, 30, 60, 0.55), 0 0 32px rgba(0, 212, 255, 0.15);
 }
 
-/* ناحیه تصویر با نسبت ۲:۳ (پرتره) مطابق عکس‌های آپلود‌شده */
+/* تصویر عمودی ۲:۳ */
 .project-thumb {
   position: relative;
   aspect-ratio: 2 / 3;
   width: 100%;
   overflow: hidden;
-  background: radial-gradient(ellipse at 50% 30%, #0c1a32 0%, #04070d 70%);
-  border-bottom: none;
+  background: #04070d;
 }
 
 .project-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  transition: transform 0.55s ease;
+  object-position: center center;
+  transition: transform 0.6s ease;
   display: block;
 }
 
 .project-card:hover .project-thumb img {
-  transform: scale(1.045);
+  transform: scale(1.04);
 }
 
-/* بج وضعیت شبیه Active / Completed */
+/* لایه تیره + تار از پایین برای خوانایی متن روی عکس (بدون بک‌گراند solid) */
+.project-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to top,
+      rgba(2, 6, 14, 0.97) 0%,
+      rgba(4, 10, 22, 0.85) 18%,
+      rgba(6, 14, 28, 0.45) 38%,
+      rgba(6, 14, 28, 0.12) 58%,
+      transparent 78%
+    ),
+    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.55) 0%, transparent 70%);
+  backdrop-filter: blur(0px);
+}
+
+/* متن‌های روی تصویر — فقط سایه و گرادیان، بدون جعبه بک‌گراند */
+.project-overlay-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.project-overlay-info .project-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.3;
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.9),
+    0 0 24px rgba(0, 0, 0, 0.6),
+    0 1px 2px rgba(0, 0, 0, 1);
+}
+
+.project-overlay-info .project-meta {
+  font-size: 0.78rem;
+  color: rgba(226, 232, 240, 0.88);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85), 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.project-overlay-info .project-meta .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.7);
+}
+
+/* بج وضعیت — شیشه‌ای تار (glass + blur) */
 .project-status-chip {
   position: absolute;
   top: 16px;
   left: 16px;
-  z-index: 2;
+  z-index: 3;
   padding: 6px 14px;
   border-radius: 99px;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .project-status-chip.is-active {
-  background: rgba(16, 185, 129, 0.92);
+  background: rgba(16, 185, 129, 0.55);
   color: #ecfdf5;
-  border: 1px solid rgba(167, 243, 208, 0.5);
+  border: 1px solid rgba(167, 243, 208, 0.45);
 }
 
 .project-status-chip.is-done {
-  background: rgba(14, 165, 233, 0.9);
+  background: rgba(14, 165, 233, 0.5);
   color: #f0f9ff;
-  border: 1px solid rgba(125, 211, 252, 0.45);
+  border: 1px solid rgba(125, 211, 252, 0.4);
 }
 
 .project-category-chip {
   position: absolute;
   top: 16px;
   right: 16px;
-  z-index: 2;
-  background: rgba(4, 7, 13, 0.78);
-  border: 1px solid rgba(0, 212, 255, 0.45);
-  color: var(--light-blue);
+  z-index: 3;
+  background: rgba(4, 7, 13, 0.45);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  color: #e0f2fe;
   padding: 5px 12px;
   border-radius: 99px;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 14px rgba(0, 212, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.3);
 }
 
+/* بدنه پایین کارت — فقط دکمه */
 .project-body {
-  padding: 20px 22px 22px;
-  flex: 1;
+  padding: 14px 18px 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.project-title {
-  font-size: 1.18rem;
-  font-weight: 800;
-  color: #fff;
-  margin: 0;
-  line-height: 1.35;
-}
-
-.project-meta {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 10px;
-  align-items: center;
-}
-
-.project-meta .dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(56, 189, 248, 0.5);
+  background: #060b14;
 }
 
 .project-desc {
-  color: var(--text-muted);
-  font-size: 0.88rem;
-  margin: 0;
-  line-height: 1.55;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: none; /* توضیحات روی کارت شلوغ می‌کند؛ در مودال/صفحه جزئیات قابل استفاده است */
 }
 
 .project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 2px;
-}
-
-.tag-chip {
-  font-size: 0.72rem;
-  padding: 3px 9px;
-  border-radius: 6px;
-  background: rgba(13, 40, 71, 0.7);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  color: #bae6fd;
-  font-family: monospace;
+  display: none;
 }
 
 .project-links {
   display: flex;
   gap: 10px;
-  margin-top: auto;
-  padding-top: 14px;
 }
 
 .project-links a {
   flex: 1;
   text-align: center;
-  padding: 11px 14px;
-  border-radius: 12px;
-  font-size: 0.88rem;
+  padding: 12px 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
-  transition: var(--transition);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .link-live {
-  background: linear-gradient(90deg, var(--mid-blue), var(--light-blue));
-  color: #020617;
-  box-shadow: 0 0 18px rgba(0, 212, 255, 0.35);
+  background: #f8fafc;
+  color: #0f172a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .link-live:hover {
-  box-shadow: 0 0 22px rgba(0, 212, 255, 0.7);
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.25);
 }
 
 .link-repo {
-  background: rgba(13, 40, 71, 0.5);
-  color: var(--text-main);
-  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.8);
+  color: #e2e8f0;
+  border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
 .link-repo:hover {
